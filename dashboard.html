@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safe Haven - Map</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-search@2.9.0/dist/leaflet-search.min.css" />
+    <style>
+        
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+        * {
+            padding: 0;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        nav {
+            width: 100%;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            margin-bottom: 20px;
+        }
+
+        .nav-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo span {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #03f554;
+        }
+
+        .links a {
+            font-size: 1.1rem;
+            color: #333;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .links a:hover {
+            color: #03f554;
+        }
+
+        .hamburg {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            color: #0e0d0d;
+            font-size: 3rem;
+            padding: 15px;
+        }
+
+        .hamburg-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: rgba(252, 252, 252, 0.8);
+            min-width: 150px;
+            border-radius: 5px;
+            box-shadow: 0 8px 16px rgba(20, 18, 18, 0.2);
+            z-index: 1;
+        }
+
+        .hamburg-dropdown a {
+            color: rgb(19, 39, 23);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 1rem;
+        }
+
+        .hamburg-dropdown a:hover {
+            background-color: #03f554;
+        }
+
+        .main-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #map {
+            width: 100%;
+            height: 500px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .leaflet-search {
+            margin: 10px 0;
+            width: 100%;
+            max-width: 300px;
+            z-index: 999;
+        }
+
+        .map-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <span>Safe Haven</span>
+            </div>
+            <div class="links">
+                <a href="report.html">Report</a>
+                <a href="view_modules.php">Modules</a>
+                <a href="dashboard.html">Map</a>
+                <a href="emergency.html">Emergency</a>
+            </div>
+            <div class="hamburg">
+                <i class="fas fa-bars" id="hamburgButton"></i>
+                <div id="hamburgDropdown" class="hamburg-dropdown">
+                    <a href="edit_profile.html">Edit Profile</a>
+                    <a href="user_history.html">History</a>
+                    <a href="#" id="logoutBtn">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+
+        <div class="map-title">Emergency Locations in Lipa, Batangas</div>
+        
+        <div id="map"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-search@2.9.0/dist/leaflet-search.min.js"></script>
+    <script>
+        
+        const map = L.map('map').setView([13.9368, 121.1620], 13); 
+
+       
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        const locations = [
+            { lat: 13.9430, lng: 121.1592, type: 'Police Station', name: 'Lipa City Police Station' },
+            { lat: 13.9447, lng: 121.1601, type: 'Police Station', name: 'Lipa City Police Station 2' },
+            { lat: 13.9380, lng: 121.1625, type: 'Hospital', name: 'Lipa Medix Medical Center' },
+            { lat: 13.9400, lng: 121.1635, type: 'Hospital', name: 'The Medical City Lipa' },
+            { lat: 13.9375, lng: 121.1615, type: 'Hospital', name: 'Lipa City General Hospital' },
+            { lat: 13.9370, lng: 121.1650, type: 'Shelter', name: 'Lipa Shelter Home' },
+            { lat: 13.9365, lng: 121.1660, type: 'Shelter', name: 'Lipa Women’s Shelter' },
+            { lat: 13.9355, lng: 121.1610, type: 'Shelter', name: 'Lipa Children’s Shelter' },
+        ];
+
+        const markers = [];
+        locations.forEach(location => {
+            const marker = L.marker([location.lat, location.lng])
+                .bindPopup(`<b>${location.name}</b><br>Location type: ${location.type}`)
+                .addTo(map);
+
+            markers.push(marker);
+        });
+
+        const searchControl = new L.Control.Search({
+            layer: L.layerGroup(markers), 
+            initial: false,
+            zoom: 12,
+            textPlaceholder: 'Search for a location...',
+            position: 'topright'
+        });
+        map.addControl(searchControl);
+
+        document.getElementById('hamburgButton').addEventListener('click', function() {
+            const dropdown = document.getElementById('hamburgDropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        window.onclick = function(event) {
+            if (!event.target.matches('#hamburgButton')) {
+                const dropdowns = document.getElementsByClassName("hamburg-dropdown");
+                for (let i = 0; i < dropdowns.length; i++) {
+                    const openDropdown = dropdowns[i];
+                    if (openDropdown.style.display === 'block') {
+                        openDropdown.style.display = 'none';
+                    }
+                }
+            }
+        }
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            alert('You have logged out.');
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>

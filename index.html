@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Safe Haven</title>
+  <link href="https://fonts.googleapis.com/css2?family=Miniver&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+
+@import url('https://fonts.googleapis.com/css2?family=Miniver&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+img {
+    width: 100%;
+}
+
+.section-content {
+    margin: 0 auto;
+    padding: 0 20px;
+    max-width: 1300px;
+}
+
+.section-title {
+    text-align: center;
+    padding: 60px 0 100px;
+    text-transform: uppercase;
+    font-size: x-large;
+}
+
+.section-title::after {
+    content: "";
+    width: 80px;
+    height: 5px;
+    display: block;
+    margin: 10px auto 0;
+    border-radius: 8px;
+    background: #0e7413;
+}
+
+
+html, body {
+    height: 100%;
+    overflow-x: hidden; 
+}
+
+
+header {
+    position: fixed;
+    width: 100%;
+    z-index: 5;
+    background: #0e5717;
+    top: 0;
+    left: 0;
+}
+
+header .navbar {
+    display: flex;
+    padding: 20px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.navbar .nav-logo .logo-text {
+    color: #ffffff;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.navbar .nav-menu {
+    display: flex;
+    gap: 10px;
+}
+
+.navbar .nav-menu .nav-link {
+    padding: 10px 18px;
+    color: #000000;
+    font-size: 1.12rem;
+    border-radius: 30px;
+    transition: 0.3s ease;
+}
+
+.navbar .nav-menu .nav-link:hover {
+    color: #fff;
+    background-color: #00ff37;
+}
+
+
+.hero-section {
+    min-height: 100vh;
+    background: #ffffff;
+    padding-top: 80px;
+}
+
+.hero-section .section-content {
+    display: flex;
+    align-items: center;
+    min-height: 100vh;
+    color: #000000;
+    justify-content: space-between;
+}
+
+.hero-section .hero-details .title {
+    font-size: 2.3rem;
+    color: #00ff40;
+    font-family: "Miniver", sans-serif;
+}
+
+.hero-section .hero-details .subtitle {
+    margin-top: 8px;
+    max-width: 70%;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.hero-section .hero-details .description {
+    max-width: 70%;
+    margin: 24px 0 40px;
+    font-size: 1.12rem;
+}
+
+.hero-section .hero-details .buttons {
+    display: flex;
+    gap: 23px;
+}
+
+.hero-section .hero-details .button {
+    padding: 10px 26px;
+    border: 2px solid transparent;
+    color: #ffffff;
+    border-radius: 30px;
+    background-color: #00ff22;
+    font-weight: 500;
+    transition: 0.3s ease;
+}
+
+.hero-section .hero-details .button:hover,
+.hero-section .hero-details .contact-us {
+    color: #06fc6c;
+    border-color: #00ff55;
+    background-color: transparent;
+}
+
+.hero-section .hero-details .contact-us:hover {
+    color: #ffffff;
+    border-color: #fff5f5;
+    background: #05ff6d;
+}
+
+.hero-section .hero-image-wrapper {
+    max-width: 500px;
+    margin-right: 30px;
+}
+
+/* About Section */
+.about-section {
+    padding: 120px 0;
+    background: #faf4f5;
+}
+
+.about-section .section-content {
+    display: flex;
+    gap: 50px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.about-section .about-image-wrapper .about-image {
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.about-section .about-details .section-title {
+    padding: 0;
+}
+
+.about-section .about-details .text {
+    line-height: 30px;
+    margin: 50px 0 30px;
+    text-align: center;
+    font-size: medium;
+}
+
+.about-section .social-link-list {
+    display: flex;
+    gap: 25px;
+    justify-content: center;
+}
+
+.about-section .social-link-list .social-link {
+    color: #3b141c;
+    font-size: large;
+    transition: 0.3s ease;
+}
+
+.about-section .social-link-list .social-link:hover {
+    color: #f3961c;
+}
+
+
+.menu-section {
+    color: #fff;
+    background: #252525;
+    padding: 50px 0 100px;
+}
+
+.menu-section .menu-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 110px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.menu-section .menu-list .menu-item {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+    justify-content: space-between;
+    width: calc(100% / 2 - 110px);
+}
+
+.menu-section .menu-list .menu-item .menu-image {
+    max-width: 83%;
+    aspect-ratio: 1;
+}
+
+
+.gallery-section {
+    padding: 50px 0 100px;
+}
+
+.gallery-section .gallery-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 42px;
+}
+
+.gallery-section .gallery-list .gallery-item {
+    overflow: hidden;
+    border-radius: 8px;
+    width: calc(100% / 3 - 32px);
+}
+
+.gallery-section .gallery-item .gallery-image {
+    width: 100%;
+    height: 100%;
+    cursor: zoom-in;
+    transition: 0.3s ease;
+}
+
+.gallery-section .gallery-item:hover .gallery-image {
+    transform: scale(1.3);
+}
+
+
+.contact-section {
+    padding: 60px 0 100px;
+    background: #faf4f5;
+}
+
+.contact-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    color: #3b141c;
+}
+
+.contact-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.contact-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 1.2rem;
+    color: #3b141c;
+}
+
+.contact-info i {
+    font-size: 1.5rem;
+    color: #f3961c;
+}
+
+.contact-info p {
+    margin: 0;
+}
+
+.footer-section {
+    padding: 20px 0;
+    background: #252525;
+    justify-content: space-between;
+}
+
+.footer-section .section-cotent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.footer-section :where(.copyright-text, .social-link, .policy-link) {
+    color: #fff;
+    transition: 0.2s ease;
+}
+
+.footer-section .social-link-list {
+    display: flex;
+    gap: 25px;
+}
+
+.footer-section .social-link-list .social-link {
+    font-size: large;
+}
+
+.footer-section .social-link-list .social-link:hover {
+    color: #f3961c;
+}
+
+.footer-section .policy-text .separator {
+    margin: 0 5px;
+    color: #fff;
+}
+
+  </style>
+</head>
+<body>
+    <header>
+      <nav class="navbar">
+        <a href="#" class="nav-logo">
+          <h2 class="logo-text">Safe Haven</h2>
+        </a>
+        <ul class="nav-menu">
+          <li class="nav-item"><a href="#home" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
+          <li class="nav-item"><a href="#features" class="nav-link">Features</a></li>
+          <li class="nav-item"><a href="#resources" class="nav-link">Resources</a></li>
+          <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+    
+      <section class="hero-section" id="home">
+        <div class="section-content">
+          <div class="hero-details">
+            <h2 class="title">Safe Haven</h2>
+            <h3 class="subtitle">Empowering Survivors, Protecting Lives</h3>
+            <p class="description">
+              Join us in creating a world where women, children, and vulnerable communities are safe, supported, and empowered.
+            </p>
+            <div class="buttons">
+              <a href="register.html" class="button report-now">Register</a>
+              <a href="login.html" class="button contact-us">Log in</a>
+            </div>
+          </div>
+          <div class="hero-image-wrapper">
+            <img src="images/womens_retreat_logo_0_0-1024x744.png" alt="Safe Haven" class="hero-image">
+          </div>
+        </div>
+      </section>
+      
+     
+      <section class="about-section" id="about">
+        <div class="section-content">
+          <div class="about-image-wrapper">
+            <img src="images/1443EWP_0137-1.jpg" alt="About Safe Haven" class="about-image">
+          </div>
+          <div class="about-details">
+            <h2 class="section-title">About Safe Haven</h2>
+            <p class="text">
+              Safe Haven is a platform dedicated to providing support for survivors of violence. Our mission is to ensure safety, offer resources, and create a community of support for those in need.
+            </p>
+            <div class="social-link-list">
+              <a href="#" class="social-link"><i class="fa-brands fa-facebook"></i></a>
+              <a href="#" class="social-link"><i class="fa-brands fa-instagram"></i></a>
+              <a href="#" class="social-link"><i class="fa-brands fa-twitter"></i></a>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <section class="menu-section" id="features">
+        <h2 class="section-title">Key Features</h2>
+        <div class="section-content">
+          <ul class="menu-list">
+            <li class="menu-item">
+              <img src="images/Report.jpg.png" alt="Report Incident" class="menu-image">
+              <h3 class="name">Incident Reporting</h3>
+              <p class="text">Securely report incidents of violence and track their progress.</p>
+            </li>
+            <li class="menu-item">
+              <img src="images/MDyUo8ASYu9SoJ8oU3_V8u1MAqmRHUqpZL1OU6T9UV3mKP3HcFANWVRIjW5tAspl7czq.jfif" alt="Directory" class="menu-image">
+              <h3 class="name">Shelter Directory</h3>
+              <p class="text">Find nearby shelters and support centers for immediate assistance.</p>
+            </li>
+            <li class="menu-item">
+              <img src="images/Module.jpg.png" alt="Resources" class="menu-image">
+              <h3 class="name">Educational Resources</h3>
+              <p class="text">Access information on your rights, laws, and safety guidelines.</p>
+            </li>
+            <li class="menu-item">
+              <img src="images/emergency.jpg.png" alt="Emergency Contacts" class="menu-image">
+              <h3 class="name">Emergency Contacts</h3>
+              <p class="text">Quick access to essential emergency numbers and services.</p>
+            </li>
+          </ul>
+        </div>
+      </section>
+      
+
+      <section class="gallery-section" id="resources">
+        <h2 class="section-title">Gallery</h2>
+        <div class="section-content">
+          <ul class="gallery-list">
+            <li class="gallery-item">
+              <img src="images/OIP.jfif" alt="Resource 1" class="gallery-image">
+            </li>
+            <li class="gallery-item">
+              <img src="images/download.jfif" alt="Resource 2" class="gallery-image">
+            </li>
+            <li class="gallery-item">
+              <img src="images/MDyUo8ASYu9SoJ8oU3_V8u1MAqmRHUqpZL1OU6T9UV3mKP3HcFANWVRIjW5tAspl7czq.jfif" alt="Resource 3" class="gallery-image">
+            </li>
+          </ul>
+        </div>
+      </section>
+      
+    
+      <section class="contact-section" id="contact">
+        <h2 class="section-title">Contact Us</h2>
+        <div class="contact-content">
+          <ul class="contact-list">
+            <li class="contact-info"><i class="fa-solid fa-location-crosshairs"></i><p>Your City, Country</p></li>
+            <li class="contact-info"><i class="fa-regular fa-envelope"></i><p>support@safehaven.com</p></li>
+            <li class="contact-info"><i class="fa-solid fa-phone"></i><p>+123 456 7890</p></li>
+            <li class="contact-info"><i class="fa-regular fa-globe"></i><p>www.safehaven.com</p></li>
+          </ul>
+        </div>
+      </section>
+      
+      <footer class="footer-section">
+        <div class="section-content">
+          <p class="copyright-text">© 2024 Safe Haven. All Rights Reserved.</p>
+          <div class="social-link-list">
+            <a href="#" class="social-link"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#" class="social-link"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="social-link"><i class="fa-brands fa-twitter"></i></a>
+          </div>
+          <p class="policy-text">
+            <a href="#" class="policy-link">Privacy Policy</a><span class="separator">.</span><a href="#" class="policy-link">Terms of Service</a>
+          </p>
+        </div>
+      </footer>
+    </main>
+  
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+  </body>
+</html>

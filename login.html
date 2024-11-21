@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Safe Haven</title>
+   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+       
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        nav {
+            width: 100%;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+
+        .nav-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo span {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #03f554;
+        }
+
+        .links a {
+            margin: 0 10px;
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .links a:hover {
+            color: #00ff22;
+        }
+
+        .main-container {
+            width: 90%;
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .content h2 {
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+            padding-right: 40px; 
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus {
+            border-color: #03f554;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #03f554;
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #02d14b;
+        }
+
+        .content p {
+            color: #333;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .content a {
+            color: #09ff00;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .content a:hover {
+            color: #00ff40;
+            text-decoration: underline;
+        }
+
+        .eye-icon {
+            position: absolute;
+            right: 10px;
+            top: 57%;
+            transform: translateY(-57%);
+            cursor: pointer;
+            font-size: 1rem;
+            color: #333;
+            transition: color 0.3s;
+        }
+
+        .eye-icon:hover {
+            color: #03f554;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                width: 95%;
+            }
+
+            input[type="text"], input[type="password"], input[type="submit"] {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <span>Safe Haven</span>
+            </div>
+            <div class="links">
+                <a href="index.html">Back to Website</a>
+            </div>
+        </div>
+    </nav>
+    <div class="main-container">
+        <div class="content">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <input type="text" id="loginUsername" placeholder="Username" required>
+                <input type="password" id="loginPassword" placeholder="Password" required>
+                <i class="fas fa-eye eye-icon" id="togglePassword"></i> 
+                <input type="submit" value="Login">
+            </form>
+            <p>New to Safe Haven? <a href="register.html">Create an account</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            fetch('login.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = data.is_admin ? 'admindash.html' : 'report.html';
+                } else {
+                    alert(data.message || 'Invalid username or password.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        });
+
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordField = document.getElementById('loginPassword');
+            const icon = this;
+            const type = passwordField.type === 'password' ? 'text' : 'password';
+            passwordField.type = type;
+
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        });
+    </script>
+</body>
+</html>

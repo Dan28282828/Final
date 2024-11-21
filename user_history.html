@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Report History</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+            @import url('https://fonts.googleapis.com/css2?family=Clicker+Script&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+nav {
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px 0;
+}
+
+.nav-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo span {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #03f554;
+}
+
+.links a {
+    margin: 0 10px;
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.links a:hover {
+    color: #00ff22;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+th {
+    background-color: #03f554;
+    color: #ffffff;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #e0e7ff;
+    cursor: pointer;
+}
+
+a {
+    color: #09ff00;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #00ff40;
+    text-decoration: underline;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.filter-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.filter-container input,
+.filter-container select {
+    padding: 8px;
+    font-size: 0.9rem;
+    margin-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+    }
+
+    .nav-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .links {
+        margin-top: 10px;
+    }
+
+    th, td {
+        font-size: 0.85rem;
+        padding: 10px;
+    }
+
+    .hamburg {
+        display: block; 
+    }
+
+    .hamburg-dropdown {
+        display: block; 
+    }
+}
+    </style>
+</head>
+<body>
+    <nav>
+        
+    </nav>
+
+    <div class="container">
+        <h2>User Report History</h2>
+
+       
+        <div class="filter-container">
+            <input type="text" id="searchBar" placeholder="Search by name or email...">
+            <select id="dateFilter">
+                <option value="">Filter by Date</option>
+                <option value="last_week">Last Week</option>
+                <option value="last_month">Last Month</option>
+                <option value="last_year">Last Year</option>
+            </select>
+        </div>
+
+       
+        <table id="reportTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Description</th>
+                    <th>File</th>
+                    <th>Date Submitted</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+        </table>
+    </div>
+
+    <script>
+        
+        function fetchReports() {
+            const searchTerm = document.getElementById('searchBar').value.toLowerCase();
+            const dateFilter = document.getElementById('dateFilter').value;
+
+            const params = new URLSearchParams();
+            if (searchTerm) params.append('search', searchTerm); 
+            if (dateFilter) params.append('date', dateFilter);   
+            
+            fetch('fetch_reports.php?' + params.toString())
+                .then(response => response.json())
+                .then(data => {
+                    const reportTable = document.getElementById('reportTable').getElementsByTagName('tbody')[0];
+                    reportTable.innerHTML = '';
+                    
+                    data.forEach(report => {
+                        const row = reportTable.insertRow();
+                        row.insertCell(0).textContent = report.id;
+                        row.insertCell(1).textContent = report.name;
+                        row.insertCell(2).textContent = report.email;
+                        row.insertCell(3).textContent = report.description;
+                        
+                        const fileCell = row.insertCell(4);
+                        if (report.file_path) {
+                            const fileLink = document.createElement('a');
+                            fileLink.href = report.file_path;
+                            fileLink.textContent = 'View File';
+                            fileLink.target = '_blank';
+                            fileCell.appendChild(fileLink);
+                        } else {
+                            fileCell.textContent = 'No file';
+                        }
+                        
+                        row.insertCell(5).textContent = new Date(report.created_at).toLocaleDateString();
+                    });
+                })
+                .catch(error => console.error('Error fetching reports:', error));
+        }
+
+        document.getElementById('searchBar').addEventListener('input', fetchReports);
+        document.getElementById('dateFilter').addEventListener('change', fetchReports);
+
+        window.onload = fetchReports;
+    </script>
+</body>
+</html>

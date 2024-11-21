@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Safe Haven</title>
+    <style>
+         body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        nav {
+            width: 100%;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+        .nav-container {
+            width: 90%;
+            max-width: 1300px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo span {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #03f554;
+        }
+        .links a {
+            margin: 0 10px;
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .links a:hover {
+            color: #00ff22;
+        }
+        .main-container {
+            width: 90%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .content h2 {
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input[type="text"], input[type="date"], input[type="number"], input[type="password"], input[type="email"], select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease; 
+            box-sizing: border-box; 
+        }
+        input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus, input[type="password"]:focus, input[type="email"]:focus, select:focus {
+            border-color: #03f554; 
+            padding: 12px; 
+            width: calc(100% + 10px); 
+        }
+        .password-container {
+            position: relative;
+            width: 100%;
+        }
+        .eye-icon {
+            position: absolute;
+            right: 10px;
+            top: 15px;
+            cursor: pointer;
+            color: #777;
+            font-size: 1.2rem;
+        }
+        .content p {
+            color: #333;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+        .content a {
+            color: #09ff00;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .content a:hover {
+            color: #00ff40;
+            text-decoration: underline;
+        }
+        .form-page {
+            display: none;
+        }
+        .form-page.active {
+            display: block;
+        }
+        .agreement, .gender-selection {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .agreement input, .gender-selection input {
+            margin-right: 5px;
+        }
+        .gender-selection label {
+            margin-right: 20px;
+        }
+        button#nextPage1 {
+            background-color: #03f554; 
+            color: white; 
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s; 
+        }
+        button#nextPage1:hover {
+            background-color: #02d14b; 
+            transform: scale(1.05); 
+        }
+        button#nextPage1:focus {
+            outline: none; 
+            box-shadow: 0 0 5px #03f554;
+        }
+        .buttons-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .buttons-container button, .buttons-container input[type="submit"] {
+            width: 48%;
+        }
+        .buttons-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .buttons-container button,
+        .buttons-container input[type="submit"] {
+            width: 48%; 
+            padding: 10px 20px; 
+            font-size: 1rem; 
+            background-color: #03f554; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            transition: background-color 0.3s ease; 
+        }
+        .buttons-container button:hover,
+        .buttons-container input[type="submit"]:hover {
+            background-color: #00ff22; 
+        }
+        @media (max-width: 768px) {
+            .main-container {
+                width: 95%;
+            }
+            input[type="text"], input[type="date"], input[type="number"], input[type="password"], input[type="email"], select, input[type="submit"], button {
+                font-size: 0.9rem;
+            }
+            .buttons-container button, .buttons-container input[type="submit"] {
+                width: 100%;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <span>Safe Haven</span>
+            </div>
+            <div class="links">
+                <a href="login.html">Back to Login</a>
+            </div>
+        </div>
+    </nav>
+    <div class="main-container">
+        <div class="content">
+            <h2>Create Your Account</h2>
+            <form id="registerForm">
+                <div class="form-page active" id="page1">
+                    <input type="email" id="email" placeholder="Email" required>
+                    <input type="text" id="username" placeholder="Username" required>
+                    <div class="password-container">
+                        <input type="password" id="password" placeholder="Password" required>
+                        <span class="eye-icon" id="togglePassword1">&#128065;</span>
+                    </div>
+                    <div class="password-container">
+                        <input type="password" id="passwordConfirm" placeholder="Confirm Password" required>
+                        <span class="eye-icon" id="togglePassword2">&#128065;</span>
+                    </div>
+                    <button type="button" id="nextPage1">Next</button>
+                </div>
+                <div class="form-page" id="page2">
+                    <input type="text" id="fullName" placeholder="Full Name" required>
+                    <input type="text" id="address" placeholder="Address" required>
+                    <input type="date" id="birthdate" required onchange="calculateAge()">
+                    <input type="number" id="age" placeholder="Age" required min="1" readonly>
+                    <div class="gender-selection">
+                        <label>
+                            <input type="radio" id="male" name="gender" value="Male" required> Male
+                        </label>
+                        <label>
+                            <input type="radio" id="female" name="gender" value="Female" required> Female
+                        </label>
+                        <label>
+                            <input type="radio" id="other" name="gender" value="Other" required> Other
+                        </label>
+                    </div>
+                    <div class="agreement">
+                        <input type="checkbox" id="agreement" required>
+                        <label for="agreement">I agree to the <a href="terms.html">terms and conditions</a></label>
+                    </div>
+                    <div class="buttons-container">
+                        <button type="button" id="backPage2">Back</button>
+                        <input type="submit" value="Register">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let formData = {}; 
+
+        // Calculate age based on birthdate
+        function calculateAge() {
+            const birthdate = document.getElementById('birthdate').value;
+            const birthDateObj = new Date(birthdate);
+            const today = new Date();
+            let age = today.getFullYear() - birthDateObj.getFullYear();
+            const month = today.getMonth() - birthDateObj.getMonth();
+            if (month < 0 || (month === 0 && today.getDate() < birthDateObj.getDate())) {
+                age--;
+            }
+            document.getElementById('age').value = age;
+        }
+
+        document.getElementById('nextPage1').addEventListener('click', function() {
+            const password = document.getElementById('password').value;
+            const passwordConfirm = document.getElementById('passwordConfirm').value;
+            if (password !== passwordConfirm) {
+                alert("Passwords do not match!");
+                return;
+            }
+            formData.email = document.getElementById('email').value;
+            formData.username = document.getElementById('username').value;
+            formData.password = password;
+            document.getElementById('page1').classList.remove('active');
+            document.getElementById('page2').classList.add('active');
+        });
+
+        document.getElementById('backPage2').addEventListener('click', function() {
+            document.getElementById('page1').classList.add('active');
+            document.getElementById('page2').classList.remove('active');
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            formData.fullName = document.getElementById('fullName').value;
+            formData.address = document.getElementById('address').value;
+            formData.birthdate = document.getElementById('birthdate').value;
+            formData.age = document.getElementById('age').value;
+            formData.gender = document.querySelector('input[name="gender"]:checked').value;
+
+            const agreementChecked = document.getElementById('agreement').checked;
+            if (!agreementChecked) {
+                alert("You must agree to the terms and conditions.");
+                return;
+            }
+
+            fetch('register.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = 'login.html';
+                } else {
+                    alert('Registration failed! Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Something went wrong. Please try again later.');
+            });
+        });
+
+        document.getElementById('togglePassword1').addEventListener('click', function() {
+            const passwordField = document.getElementById('password');
+            const type = passwordField.type === 'password' ? 'text' : 'password';
+            passwordField.type = type;
+        });
+
+        document.getElementById('togglePassword2').addEventListener('click', function() {
+            const passwordField = document.getElementById('passwordConfirm');
+            const type = passwordField.type === 'password' ? 'text' : 'password';
+            passwordField.type = type;
+        });
+    </script>
+</body>
+</html>

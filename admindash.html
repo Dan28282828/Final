@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Clicker+Script&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        nav {
+            width: 100%;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+
+        .nav-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo span {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #03f554;
+        }
+
+        .links a {
+            margin: 0 10px;
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .links a:hover {
+            color: #00ff22;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .analytics {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 40px;
+        }
+
+        .analytics div {
+            background-color: #e7f7e1;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 30%;
+        }
+
+        .analytics div h3 {
+            color: #4caf50;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+            }
+            .links {
+                display: none; 
+            }
+            .hamburg {
+                display: inline-block; 
+            }
+            .analytics {
+                flex-direction: column;
+                align-items: center;
+            }
+            .analytics div {
+                width: 80%;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <span>Safe Haven</span>
+            </div>
+            <div class="links">
+                <a href="admindash.html">Dashboard</a>
+                <a href="admin_report_history.html">Reports</a>
+                <a href="post_module_form.PHP">Learning Materials</a>
+                <a href="manage_users.html">Users</a>
+            </div>
+            <div class="hamburg">
+                <i class="fas fa-bars" id="hamburgButton"></i>
+                <div id="hamburgDropdown" class="hamburg-dropdown">
+                    <a href="admin_sos_reports.html" id="activity_log">History SoS</a>
+                    <a href="activity_log.html" id="activity_log">Activity Log</a>
+                    <a href="#" id="logoutBtn">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>Admin Dashboard</h2>
+        <p>Manage users, view reports, and post new modules.</p>
+        
+        <div class="analytics">
+            <div>
+                <h3>Total Users</h3>
+                <p id="totalUsers">Loading...</p>
+            </div>
+            <div>
+                <h3>Total Reports</h3>
+                <p id="totalReports">Loading...</p>
+            </div>
+            <div>
+                <h3>Total Modules</h3>
+                <p id="totalModules">Loading...</p>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <button onclick="generateReport()">Generate Reports</button>
+        </div>
+    </div>
+
+    <script>
+       
+        function fetchAnalyticsData() {
+            fetch('fetch_data.php')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('totalUsers').textContent = data.totalUsers;
+                    document.getElementById('totalReports').textContent = data.totalReports;
+                    document.getElementById('totalModules').textContent = data.totalModules;
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+
+       
+        window.onload = fetchAnalyticsData;
+
+       
+        function generateReport() {
+            alert("Generating report... (this would trigger a download in a real system)");
+            window.location.href = 'generate_report.php';  
+        }
+
+    
+        document.getElementById('hamburgButton').addEventListener('click', function() {
+            const dropdown = document.getElementById('hamburgDropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+    // Send an AJAX request to update the logout time
+    fetch('update_logout_time.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ logout: true })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('You have logged out.');
+            window.location.href = 'login.html'; // Redirect to login page after logging out
+        } else {
+            alert('Error logging out.');
+        }
+    })
+    .catch(error => {
+        console.error('Error during logout:', error);
+        alert('Failed to log out.');
+    });
+});
+
+    </script>
+</body>
+</html>

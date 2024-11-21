@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Contacts</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-search@2.9.0/dist/leaflet-search.min.css" />
+    <style>
+        body {
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        nav {
+            width: 100%;
+            background-color: #ffffff;
+            padding: 15px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .nav-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo span {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #03f554;
+        }
+        .links a {
+            font-size: 1.1rem;
+            color: #333;
+            margin: 0 15px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .links a:hover {
+            color: #03f554;
+        }
+        .main-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px 0;
+        }
+
+        .hamburg {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            color: #0e0d0d;
+            font-size: 3rem;
+            padding: 15px;
+        }
+
+        .hamburg-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: rgba(252, 252, 252, 0.8);
+            min-width: 150px;
+            border-radius: 5px;
+            box-shadow: 0 8px 16px rgba(20, 18, 18, 0.2);
+            z-index: 1;
+        }
+
+        .hamburg-dropdown a {
+            color: rgb(19, 39, 23);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 1rem;
+        }
+
+        .hamburg-dropdown a:hover {
+            background-color: #03f554;
+        }
+        .emergency-container {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .content h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+        .contact-item {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin: 10px 0;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: space-between;
+        }
+        .sos-button {
+            display: block;
+            margin: 0 auto;
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            font-size: 1.5rem;
+            text-align: center;
+            line-height: 80px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <span>Safe Haven</span>
+            </div>
+            <div class="links">
+                <a href="report.html">Report</a>
+                <a href="view_modules.php">Modules</a>
+                <a href="dashboard.html">Map</a>
+                <a href="emergency.html">Emergency</a>
+            </div>
+            <div class="hamburg">
+                <i class="fas fa-bars" id="hamburgButton"></i>
+                <div id="hamburgDropdown" class="hamburg-dropdown">
+                    <a href="edit_profile.html">Edit Profile</a>
+                    <a href="user_history.html">History</a>
+                    <a href="#" id="logoutBtn">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="main-container">
+        <div class="emergency-container">
+            <div class="content">
+                <h2>Emergency Contacts</h2>
+                <div class="contact-list">
+                    <div class="contact-item">
+                        <span>Police</span>
+                        <span>101</span>
+                    </div>
+                    <div class="contact-item">
+                        <span>Fire Department</span>
+                        <span>102</span>
+                    </div>
+                    <div class="contact-item">
+                        <span>Ambulance</span>
+                        <span>103</span>
+                    </div>
+                </div>
+                <button class="sos-button" id="sosButton">SOS</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('sosButton').addEventListener('click', function() {
+            if (confirm('Are you sure you want to send an SOS alert? This will notify the authorities.')) {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        function(position) {
+                            const latitude = position.coords.latitude;
+                            const longitude = position.coords.longitude;
+
+                            fetch('send_sms.php', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    latitude: latitude,
+                                    longitude: longitude,
+                                }),
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                alert(data.message);
+                            })
+                            .catch(error => {
+                                alert('Error sending SOS alert. Please try again.');
+                                console.error(error);
+                            });
+                        },
+                        function(error) {
+                            alert('Unable to retrieve location. Please check location permissions.');
+                        }
+                    );
+                } else {
+                    alert('Geolocation is not supported by your browser.');
+                }
+            }
+        });
+         // Hamburger menu toggle
+         document.getElementById('hamburgButton').addEventListener('click', function() {
+            const dropdown = document.getElementById('hamburgDropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Close dropdown if clicked outside
+        window.onclick = function(event) {
+            if (!event.target.matches('#hamburgButton')) {
+                const dropdowns = document.getElementsByClassName("hamburg-dropdown");
+                for (let i = 0; i < dropdowns.length; i++) {
+                    const openDropdown = dropdowns[i];
+                    if (openDropdown.style.display === 'block') {
+                        openDropdown.style.display = 'none';
+                    }
+                }
+            }
+        }
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            alert('You have logged out.');
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>

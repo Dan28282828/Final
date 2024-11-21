@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Log</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .no-data {
+            text-align: center;
+            font-size: 1rem;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Activity Log</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Login Time</th>
+                    <th>Log out</th>
+                </tr>
+            </thead>
+            <tbody id="activityLogBody">
+                <tr>
+                    <td colspan="4" class="no-data">Loading...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function fetchActivityLog() {
+            fetch('fetch_activity_log.php')
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.getElementById('activityLogBody');
+                    if (data.length > 0) {
+                        tbody.innerHTML = data.map(log => `
+                            <tr>
+                                <td>${log.id}</td>
+                                <td>${log.username}</td>
+                                <td>${log.login_time}</td>
+                                <td>${log.logout_time || 'Active'}</td>
+                            </tr>
+                        `).join('');
+                    } else {
+                        tbody.innerHTML = '<tr><td colspan="4" class="no-data">No activity found</td></tr>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching activity log:', error);
+                    document.getElementById('activityLogBody').innerHTML = 
+                        '<tr><td colspan="4" class="no-data">Failed to load data</td></tr>';
+                });
+        }
+
+        window.onload = fetchActivityLog;
+    </script>
+</body>
+</html>

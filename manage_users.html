@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+                @import url('https://fonts.googleapis.com/css2?family=Clicker+Script&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+nav {
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px 0;
+}
+
+.nav-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo span {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #03f554;
+}
+
+.links a {
+    margin: 0 10px;
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.links a:hover {
+    color: #00ff40;
+}
+
+.main-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.search-bar {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 20px;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+th {
+    background-color: #03f554;
+    color: #ffffff;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    cursor: pointer; 
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #e0e7ff;
+    cursor: pointer;
+}
+
+a {
+    color: #00ff40;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #00ff40;
+    text-decoration: underline;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+    .main-container {
+        width: 95%;
+    }
+
+    .nav-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .links {
+        margin-top: 10px;
+    }
+
+    th, td {
+        font-size: 0.85rem;
+        padding: 10px;
+    }
+}  
+
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <span>Safe Haven
+                </span>
+            </div>
+            <div class="links">
+                <a href="admindash.html">Dashboard</a>
+                <a href="admin_report_history.html">Reports</a>
+                <a href="post_module_form.PHP">Learning Materials</a>
+                <a href="manage_users.html">Users</a>
+            </div>
+            <div class="hamburg">
+                <i class="fas fa-bars" id="hamburgButton"></i>
+                <div id="hamburgDropdown" class="hamburg-dropdown">
+                    <a href="activity_log.html" id="activity_log">Activity Log</a>
+                    <a href="#" id="logoutBtn">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="main-container">
+        <div class="content">
+            <h2>User Management</h2>
+            <input type="text" id="searchBar" class="search-bar" placeholder="Search by name or username...">
+            <table id="userTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">ID</th>
+                        <th onclick="sortTable(1)">Full Name</th>
+                        <th onclick="sortTable(2)">Username</th>
+                        <th onclick="sortTable(3)">Role</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                        <th>Admin Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                   
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        
+        let allUsers = [];
+
+        
+        function loadUsers() {
+            fetch('get_users.php')
+            .then(response => response.json())
+            .then(data => {
+                allUsers = data; 
+                renderUsers(allUsers); 
+            })
+            .catch(error => console.error('Error fetching users:', error));
+        }
+
+        function renderUsers(users) {
+            const userTable = document.getElementById('userTable').getElementsByTagName('tbody')[0];
+            userTable.innerHTML = '';  
+
+            users.forEach(user => {
+                const row = userTable.insertRow();
+                row.insertCell(0).textContent = user.id;
+                row.insertCell(1).textContent = user.fullName;
+                row.insertCell(2).textContent = user.username;
+                row.insertCell(3).textContent = user.role;
+                row.insertCell(4).textContent = user.status === 'active' ? 'Active' : 'Disabled';
+
+                const toggleBtn = document.createElement('button');
+                toggleBtn.textContent = user.status === 'active' ? 'Disable' : 'Enable';
+                toggleBtn.classList.add('button');
+                toggleBtn.onclick = () => toggleUserStatus(user.id, user.status);
+
+                row.insertCell(5).appendChild(toggleBtn);
+
+                if (user.role !== 'admin') {
+                    const makeAdminBtn = document.createElement('button');
+                    makeAdminBtn.textContent = 'Make Admin';
+                    makeAdminBtn.classList.add('button');
+                    makeAdminBtn.onclick = () => promoteToAdmin(user.id);
+
+                    row.insertCell(6).appendChild(makeAdminBtn);
+                } else {
+                    
+                    const demoteBtn = document.createElement('button');
+                    demoteBtn.textContent = 'Demote to User';
+                    demoteBtn.classList.add('button');
+                    demoteBtn.onclick = () => demoteToUser(user.id);
+
+                    row.insertCell(6).appendChild(demoteBtn);
+                }
+            });
+        }
+
+        function searchUsers() {
+            const searchTerm = document.getElementById('searchBar').value.toLowerCase();
+            const filteredUsers = allUsers.filter(user => {
+                return user.fullName.toLowerCase().includes(searchTerm) || user.username.toLowerCase().includes(searchTerm);
+            });
+            renderUsers(filteredUsers);  
+        }
+
+        function promoteToAdmin(id) {
+            fetch('promote_to_admin.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({ id })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    loadUsers(); 
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error('Error promoting user to admin:', error));
+        }
+
+        function demoteToUser(id) {
+            fetch('demote_to_user.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({ id })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    loadUsers(); 
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error('Error demoting user:', error));
+        }
+
+        document.getElementById('hamburgButton').addEventListener('click', function() {
+            const dropdown = document.getElementById('hamburgDropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            alert('You have logged out.');
+            window.location.href = 'login.html';
+        });
+
+        document.getElementById('searchBar').addEventListener('input', searchUsers);
+
+        loadUsers();
+    </script>
+</body>
+</html>
